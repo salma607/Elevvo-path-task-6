@@ -1,0 +1,19 @@
+@import "tailwindcss";
+:root{
+    --color-pink:#D6A99D;
+    --color-beig:#FAF9EE;
+    --color-green:#819A91;
+    --color-lightgreen:#D6DAC8;
+    --color-gray:#5e5e5e;
+
+    --font-type:"Arial", serif;
+
+
+
+
+
+}
+body{
+
+    font-family: var(--font-type);
+}
