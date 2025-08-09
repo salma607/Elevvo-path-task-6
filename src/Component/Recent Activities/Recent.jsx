@@ -30,21 +30,21 @@ const activities = [
 
 export default function Recent() {
   return (
-    <div className="flex flex-row-reverse ">
-      <div className="bg-white rounded-xl shadow p-5 max-w-md w-80">
-        <div className="flex justify-between items-center mb-3">
-          <span className="font-semibold text-lg">Active Projects</span>
-          <a href="#" className="text-blue-500 text-sm font-medium hover:underline">See All</a>
+    <div className="flex flex-col-reverse ml-20 mb-70 ">
+      <div className="bg-white rounded-xl shadow p-5 max-w-md w-80 border-[var(--color-lightgreen)] border-2">
+        <div className="flex justify-between items-center ">
+          <span className="font-semibold text-lg text-[var(--color-gray)]">Active Projects</span>
+          <a href="#" className="text-[var(--color-green)] text-sm font-medium hover:underline">See All</a>
         </div>
         <div>
           {activities.map((item, idx) => (
             <div key={idx} className="flex items-center py-3 border-b last:border-b-0">
               {item.avatar}
               <div className="ml-3 flex-1">
-                <div className="font-medium text-gray-900">{item.title}</div>
-                <div className="text-xs text-gray-500">{item.details}</div>
+                <div className="font-medium text-[var(--color-gray)]">{item.title}</div>
+                <div className="text-xs text-[var(--color-green)]">{item.details}</div>
               </div>
-              <div className="flex items-center text-gray-400 text-xs">
+              <div className="flex items-center text-[var(--color-gray)] text-xs">
                 <AccessTimeIcon style={{ fontSize: 18, marginRight: 4 }} />
                 {item.time}
               </div>
