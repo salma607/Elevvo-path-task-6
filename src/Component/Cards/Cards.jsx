@@ -32,15 +32,15 @@ export default function Cards() {
     },
   ];
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mx-25 ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-full p-5 mx-15">
       {cardData.map((card, idx) => (
         <div
           key={idx}
-          className={`flex items-center p-6 rounded-xl shadow-md bg-[var(--color-beig)]`}
+          className="flex items-center p-6 rounded-xl shadow-md bg-[var(--color-beig)] w-full md:w-60"
         >
-          <div className="mr-6">{card.icon}</div>
+          <div className="m-4 p-2 ">{card.icon}</div>
           <div>
-            <div className="text-[var(--color-green)] font-medium text-lg">
+            <div className="text-[var(--color-green)] font-medium text-lg max-h-64">
               {card.title}
             </div>
             <div className="text-[var(--color-gray)] font-bold text-2xl">{card.value}</div>

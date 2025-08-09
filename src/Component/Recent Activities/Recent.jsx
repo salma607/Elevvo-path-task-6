@@ -30,7 +30,7 @@ const activities = [
 
 export default function Recent() {
   return (
-    <div className="fixed right-2 m-5 ">
+    <div className="flex flex-row-reverse ">
       <div className="bg-white rounded-xl shadow p-5 max-w-md w-80">
         <div className="flex justify-between items-center mb-3">
           <span className="font-semibold text-lg">Active Projects</span>
