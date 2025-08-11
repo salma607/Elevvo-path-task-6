@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Radar, Scatter } from "react-chartjs-2";
 import {
   Chart,
@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { monthlyData, COLORS } from "../../Component/Graphs/Graphs";
 
 Chart.register(
   CategoryScale,
@@ -20,11 +21,10 @@ Chart.register(
   Tooltip,
   Legend
 );
-import { monthlyData, COLORS } from "../../Component/Graphs/Graphs";
 
-export default function Analysis() {
+export default function Graphs() {
   const [monthIndex, setMonthIndex] = useState(0);
-  const [graphTypeIndex, setGraphTypeIndex] = useState(0); // 0 for Radar, 1 for Scatter
+  const [currentGraphIndex, setCurrentGraphIndex] = useState(0);
 
   // Define the data and options first
   const scatterData = {
@@ -54,6 +54,8 @@ export default function Analysis() {
   };
 
   const scatterOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: "linear",
@@ -88,6 +90,8 @@ export default function Analysis() {
   };
 
   const radarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       r: {
         angleLines: {
@@ -104,7 +108,7 @@ export default function Analysis() {
     },
   };
 
-  // Now define graphTypes after the data and options are defined
+  // Define graph types
   const graphTypes = [
     { name: "Radar", component: Radar, data: radarData, options: radarOptions },
     {
@@ -115,17 +119,18 @@ export default function Analysis() {
     },
   ];
 
-  const CurrentGraph = graphTypes[graphTypeIndex].component;
+  const CurrentGraph = graphTypes[currentGraphIndex].component;
 
   return (
-    <div style={{ width: 700,marginLeft:"50px" ,padding: "10px" }}>
-    
-
-      <div style={{  textAlign: "center" }}>
+    <div className="bg-white rounded-xl shadow p-6 flex-1 ml-20 ">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-lg font-semibold text-gray-700">
+          {graphTypes[currentGraphIndex].name} Chart
+        </h3>
         <select
           value={monthIndex}
           onChange={(e) => setMonthIndex(parseInt(e.target.value))}
-          style={{ padding: "8px", borderRadius: 4 }}
+          className="px-3 py-1 border border-gray-300 rounded-md text-sm " 
         >
           {monthlyData.map((month, index) => (
             <option key={index} value={index}>
@@ -135,37 +140,25 @@ export default function Analysis() {
         </select>
       </div>
 
-      <div style={{ height: 400 ,width:700}}>
+      <div className="h-100 mb-6">
         <CurrentGraph
-          data={graphTypeIndex === 0 ? radarData : scatterData}
-          options={graphTypeIndex === 0 ? radarOptions : scatterOptions}
+          data={graphTypes[currentGraphIndex].data}
+          options={graphTypes[currentGraphIndex].options}
         />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
-        {graphTypes.map((graphType, index) => (
+      <div className="flex justify-center gap-2 ">
+        {graphTypes.map((_, index) => (
           <button
             key={index}
-            onClick={() => setGraphTypeIndex(index)}
-            style={{
-              padding: "8px 16px",
-              margin: "0 5px",
-              backgroundColor: graphTypeIndex === index ? "#36A2EB" : "#ddd",
-              color: graphTypeIndex === index ? "white" : "black",
-              border: "none",
-              borderRadius: 4,
-              cursor: "pointer",
-              fontWeight: graphTypeIndex === index ? "bold" : "normal",
-            }}
+            onClick={() => setCurrentGraphIndex(index)}
+            className={`w-8 h-8 rounded-full flex items-center justify-center mt-30 ${
+              currentGraphIndex === index
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-600"
+            }`}
           >
-            {graphType.name}
+            {index + 1}
           </button>
         ))}
       </div>
