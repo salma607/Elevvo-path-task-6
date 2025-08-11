@@ -8,9 +8,8 @@ export default function Home(){
         <div>
             <Sidebar/>
             <Cards/>
-              <div className="flex flex-row m-10">
+              <div className="flex flex-col lg:flex-row m-10 gap-6">
             <Recent/>
-          
             <Analysis/>
             </div>
         </div>

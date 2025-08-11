@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Radar, Scatter } from "react-chartjs-2";
 import {
   Chart,
@@ -21,20 +21,10 @@ Chart.register(
   Legend
 );
 import { monthlyData, COLORS } from "../../Component/Graphs/Graphs";
-import "./Analysis.css";
 
 export default function Analysis() {
   const [monthIndex, setMonthIndex] = useState(0);
   const [graphTypeIndex, setGraphTypeIndex] = useState(0); // 0 for Radar, 1 for Scatter
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 900px)");
-    const updateIsMobile = () => setIsMobile(mediaQuery.matches);
-    updateIsMobile();
-    mediaQuery.addEventListener("change", updateIsMobile);
-    return () => mediaQuery.removeEventListener("change", updateIsMobile);
-  }, []);
 
   // Define the data and options first
   const scatterData = {
@@ -131,16 +121,17 @@ export default function Analysis() {
 
   const CurrentGraph = graphTypes[graphTypeIndex].component;
 
-  const goPrev = () => setGraphTypeIndex((prev) => (prev - 1 + graphTypes.length) % graphTypes.length);
+  const goPrev = () =>
+    setGraphTypeIndex((prev) => (prev - 1 + graphTypes.length) % graphTypes.length);
   const goNext = () => setGraphTypeIndex((prev) => (prev + 1) % graphTypes.length);
 
   return (
-    <div className="analysisContainer">
-      <div className="selectWrapper">
+    <div className="w-full max-w-[900px] mx-auto px-4 py-3 box-border">
+      <div className="flex justify-center mb-3">
         <select
           value={monthIndex}
           onChange={(e) => setMonthIndex(parseInt(e.target.value))}
-          className="monthSelect"
+          className="px-3 py-2 rounded-md border border-gray-300 bg-white"
         >
           {monthlyData.map((month, index) => (
             <option key={index} value={index}>
@@ -150,7 +141,7 @@ export default function Analysis() {
         </select>
       </div>
 
-      <div className="chartWrapper">
+      <div className="relative w-full h-[340px] md:h-[380px] lg:h-[420px]">
         <CurrentGraph
           data={graphTypeIndex === 0 ? radarData : scatterData}
           options={graphTypeIndex === 0 ? radarOptions : scatterOptions}
@@ -158,12 +149,17 @@ export default function Analysis() {
       </div>
 
       {/* Desktop toggle buttons */}
-      <div className="controlsDesktop">
+      <div className="hidden lg:flex justify-center items-center mt-4 gap-2">
         {graphTypes.map((graphType, index) => (
           <button
             key={index}
             onClick={() => setGraphTypeIndex(index)}
-            className={graphTypeIndex === index ? "toggleButton active" : "toggleButton"}
+            className={
+              (graphTypeIndex === index
+                ? "bg-sky-500 text-white font-bold"
+                : "bg-gray-300 text-gray-900 font-medium") +
+              " px-4 py-2 rounded-md"
+            }
           >
             {graphType.name}
           </button>
@@ -171,17 +167,21 @@ export default function Analysis() {
       </div>
 
       {/* Mobile/tablet pagination */}
-      <div className="paginationMobile">
-        <div className="paginationButtons">
-          <button onClick={goPrev} className="navButton">Prev</button>
-          <span className="pageLabel">{graphTypes[graphTypeIndex].name}</span>
-          <button onClick={goNext} className="navButton">Next</button>
+      <div className="block lg:hidden">
+        <div className="flex justify-center items-center gap-3 mt-4">
+          <button onClick={goPrev} className="px-4 py-2 rounded-md bg-gray-900 text-white">
+            Prev
+          </button>
+          <span className="font-semibold">{graphTypes[graphTypeIndex].name}</span>
+          <button onClick={goNext} className="px-4 py-2 rounded-md bg-gray-900 text-white">
+            Next
+          </button>
         </div>
-        <div className="dots">
+        <div className="flex justify-center items-center gap-2 mt-2">
           {graphTypes.map((_, idx) => (
             <span
               key={idx}
-              className={graphTypeIndex === idx ? "dot active" : "dot"}
+              className={(graphTypeIndex === idx ? "bg-sky-500" : "bg-gray-300") + " w-2.5 h-2.5 rounded-full inline-block cursor-pointer"}
               onClick={() => setGraphTypeIndex(idx)}
             />
           ))}
