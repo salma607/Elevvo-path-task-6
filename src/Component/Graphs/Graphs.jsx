@@ -16,8 +16,8 @@ export const monthlyData = [
   },
 ];
 export const COLORS = [
-  "rgba(54, 162, 235, 0.6)",
-  "rgba(255, 99, 132, 0.6)",
-  "rgba(255, 206, 86, 0.6)",
-  "rgba(138, 226, 52, 0.6)",
+  "#819A91",
+  "#D6DAC8",
+  "#D6A99D",
+  "#A6B28B"
 ];

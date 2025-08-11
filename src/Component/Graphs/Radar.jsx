@@ -5,8 +5,8 @@ export const getRadarData = (monthIndex) => ({
   datasets: [
     {
       data: monthlyData[monthIndex].earnings,
-      backgroundColor: "rgba(54, 162, 235, 0.2)",
-      borderColor: "rgba(54, 162, 235, 1)",
+      backgroundColor: "#D6DAC8",
+      borderColor: "#819A91",
       borderWidth: 2,
     },
   ],

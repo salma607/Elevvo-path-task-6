@@ -8,16 +8,17 @@ import {
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar_list() {
+  const navigate = useNavigate();
   const Iconstyle = {
     color: "var(--color-lightgreen)",
   };
   return (
     <List>
       <Tooltip title="Overview" placement="right" disableHoverListener={open}>
-        <ListItem button component={Link} to="/">
+        <ListItem button onClick={() => navigate("/")}>
           <ListItemIcon sx={Iconstyle}>
             <DashboardIcon />
           </ListItemIcon>
@@ -25,7 +26,7 @@ export default function Sidebar_list() {
         </ListItem>
       </Tooltip>
       <Tooltip title="Projects" placement="right" disableHoverListener={open}>
-        <ListItem button component={Link} to="/projects">
+        <ListItem button onClick={() => navigate("/Table")} >
           <ListItemIcon sx={Iconstyle}>
             <AssignmentIcon />
           </ListItemIcon>
@@ -37,7 +38,7 @@ export default function Sidebar_list() {
         placement="right"
         disableHoverListener={open}
       >
-        <ListItem button component={Link} to="/profile">
+        <ListItem button >
           <ListItemIcon>
             <AccountCircleIcon sx={Iconstyle} />
           </ListItemIcon>
