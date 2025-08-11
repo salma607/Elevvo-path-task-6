@@ -26,6 +26,10 @@ export default function Analysis() {
   const [monthIndex, setMonthIndex] = useState(0);
   const [graphTypeIndex, setGraphTypeIndex] = useState(0); // 0 for Radar, 1 for Scatter
 
+  const totalMonths = monthlyData.length;
+  const goPrev = () => setMonthIndex((prev) => (prev - 1 + totalMonths) % totalMonths);
+  const goNext = () => setMonthIndex((prev) => (prev + 1) % totalMonths);
+
   // Define the data and options first
   const scatterData = {
     datasets: [
@@ -54,6 +58,8 @@ export default function Analysis() {
   };
 
   const scatterOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: "linear",
@@ -63,6 +69,7 @@ export default function Analysis() {
         ticks: {
           callback: (value) => {
             if (
+              Number.isInteger(value) &&
               value >= 0 &&
               value < monthlyData[monthIndex].taskTypes.length
             ) {
@@ -88,6 +95,8 @@ export default function Analysis() {
   };
 
   const radarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       r: {
         angleLines: {
@@ -118,10 +127,34 @@ export default function Analysis() {
   const CurrentGraph = graphTypes[graphTypeIndex].component;
 
   return (
-    <div style={{ width: 700,marginLeft:"50px" ,padding: "10px" }}>
-    
+    <div style={{ width: "100%", maxWidth: 900, margin: "0 auto", padding: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 8,
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button
+            onClick={goPrev}
+            style={{ padding: "8px 12px", borderRadius: 4, border: "1px solid #ccc", background: "#f5f5f5", cursor: "pointer" }}
+          >
+            Prev
+          </button>
+          <span style={{ fontWeight: 600 }}>
+            {monthlyData[monthIndex].month} ({monthIndex + 1}/{monthlyData.length})
+          </span>
+          <button
+            onClick={goNext}
+            style={{ padding: "8px 12px", borderRadius: 4, border: "1px solid #ccc", background: "#f5f5f5", cursor: "pointer" }}
+          >
+            Next
+          </button>
+        </div>
 
-      <div style={{  textAlign: "center" }}>
         <select
           value={monthIndex}
           onChange={(e) => setMonthIndex(parseInt(e.target.value))}
@@ -135,7 +168,7 @@ export default function Analysis() {
         </select>
       </div>
 
-      <div style={{ height: 400 ,width:700}}>
+      <div style={{ position: "relative", width: "100%", height: "55vh", maxHeight: 420, minHeight: 260 }}>
         <CurrentGraph
           data={graphTypeIndex === 0 ? radarData : scatterData}
           options={graphTypeIndex === 0 ? radarOptions : scatterOptions}
@@ -148,6 +181,8 @@ export default function Analysis() {
           justifyContent: "center",
           alignItems: "center",
           marginTop: 20,
+          flexWrap: "wrap",
+          gap: 10,
         }}
       >
         {graphTypes.map((graphType, index) => (
