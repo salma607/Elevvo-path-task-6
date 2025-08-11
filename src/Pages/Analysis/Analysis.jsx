@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Radar, Scatter } from "react-chartjs-2";
 import {
   Chart,
@@ -21,10 +21,20 @@ Chart.register(
   Legend
 );
 import { monthlyData, COLORS } from "../../Component/Graphs/Graphs";
+import "./Analysis.css";
 
 export default function Analysis() {
   const [monthIndex, setMonthIndex] = useState(0);
   const [graphTypeIndex, setGraphTypeIndex] = useState(0); // 0 for Radar, 1 for Scatter
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 900px)");
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+    updateIsMobile();
+    mediaQuery.addEventListener("change", updateIsMobile);
+    return () => mediaQuery.removeEventListener("change", updateIsMobile);
+  }, []);
 
   // Define the data and options first
   const scatterData = {
@@ -54,6 +64,8 @@ export default function Analysis() {
   };
 
   const scatterOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: "linear",
@@ -88,6 +100,8 @@ export default function Analysis() {
   };
 
   const radarOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       r: {
         angleLines: {
@@ -117,15 +131,16 @@ export default function Analysis() {
 
   const CurrentGraph = graphTypes[graphTypeIndex].component;
 
-  return (
-    <div style={{ width: 700,marginLeft:"50px" ,padding: "10px" }}>
-    
+  const goPrev = () => setGraphTypeIndex((prev) => (prev - 1 + graphTypes.length) % graphTypes.length);
+  const goNext = () => setGraphTypeIndex((prev) => (prev + 1) % graphTypes.length);
 
-      <div style={{  textAlign: "center" }}>
+  return (
+    <div className="analysisContainer">
+      <div className="selectWrapper">
         <select
           value={monthIndex}
           onChange={(e) => setMonthIndex(parseInt(e.target.value))}
-          style={{ padding: "8px", borderRadius: 4 }}
+          className="monthSelect"
         >
           {monthlyData.map((month, index) => (
             <option key={index} value={index}>
@@ -135,39 +150,42 @@ export default function Analysis() {
         </select>
       </div>
 
-      <div style={{ height: 400 ,width:700}}>
+      <div className="chartWrapper">
         <CurrentGraph
           data={graphTypeIndex === 0 ? radarData : scatterData}
           options={graphTypeIndex === 0 ? radarOptions : scatterOptions}
         />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
+      {/* Desktop toggle buttons */}
+      <div className="controlsDesktop">
         {graphTypes.map((graphType, index) => (
           <button
             key={index}
             onClick={() => setGraphTypeIndex(index)}
-            style={{
-              padding: "8px 16px",
-              margin: "0 5px",
-              backgroundColor: graphTypeIndex === index ? "#36A2EB" : "#ddd",
-              color: graphTypeIndex === index ? "white" : "black",
-              border: "none",
-              borderRadius: 4,
-              cursor: "pointer",
-              fontWeight: graphTypeIndex === index ? "bold" : "normal",
-            }}
+            className={graphTypeIndex === index ? "toggleButton active" : "toggleButton"}
           >
             {graphType.name}
           </button>
         ))}
+      </div>
+
+      {/* Mobile/tablet pagination */}
+      <div className="paginationMobile">
+        <div className="paginationButtons">
+          <button onClick={goPrev} className="navButton">Prev</button>
+          <span className="pageLabel">{graphTypes[graphTypeIndex].name}</span>
+          <button onClick={goNext} className="navButton">Next</button>
+        </div>
+        <div className="dots">
+          {graphTypes.map((_, idx) => (
+            <span
+              key={idx}
+              className={graphTypeIndex === idx ? "dot active" : "dot"}
+              onClick={() => setGraphTypeIndex(idx)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
